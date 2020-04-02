@@ -1,0 +1,261 @@
+﻿<script>
+    /*
+Выводите значения в консоль браузера с помощью команды console.log() (вызов консоли: F12->консоль)
+
+Задание 1. Напишите функцию power(), которая принимает две целочисленных значения. Функция должна возвращать результат возведения первого числа в степень второго.
+
+Задание 2. Напишите функцию compare(), которая принимает целочисленное значение x и возвращает анонимную анонимную функцию. Анонимная функция должна принимать целочисленное значение y и возвращать результат сравнения значений y и x как:
+- Если y больше, чем x, то возвращается true
+- Если y меньше, чем x, то возвращается false
+- Если значения равны, то возвращается null
+
+Задание 3. Сделайте функцию inArray, которая определяет, есть в массиве элемент с заданным текстом или нет. Функция первым параметром должна принимать текст элемента, а вторым - массив, в котором делается поиск. Функция должна возвращать true или false.
+
+Задание 4. Создайте пустой объект book1. Добавьте объекту свойства: title, pubYear и price с произвольными значениями.
+Добавьте объекту book1 свойство show. Свойство должно содержать анонимную функцию выводящую название и цену книги.
+Создайте объект book2 и установите свойства title, pubYear и price с произвольными значениями в момент создания объекта.
+Опишите функцию showBook(), которая выводит название и цену книги. Добавьте объекту book2 свойство show. Свойство должно содержать функцию showBook().
+Выведите свойства объектов в цикле.
+Вызовите метод show() у обоих объектов.
+
+Задание 5. Дан исходный код:
+var a = [5, 12];
+var b = [];
+a[99] = 7;
+Записать в массив b квадраты значений массива a:
+- с помощью цикла for
+- с помощью цикла for in
+
+Задание 6. Дан исходный код:
+var s = 'Мы знаем, что монохромный цвет - это градации серого';
+var txt = 'хром';
+var word;
+В значении переменной s найдите слово, содержащее подстроку, которая является значением переменной txt и присвойте его переменной word.
+
+Задание 7. Составить регулярное выражение, которое соответствует следующим форматам даты:
+25-02-2012
+25-2-2012
+01-12-2011
+2-12-1978
+Для проверки использовать метод test().
+
+Задание 8. Создайте конструктор Book со свойствами title, pubYear и price.
+Создайте объект типа Book передав в конструктор произвольные значения.
+Добавьте в прототип конструктора Book метод show, который выводит значения свойств title и price.
+Вызовите метод show созданного объекта.
+
+Задание 9. Описать функцию getDate(), которая получает в качестве аргумента дату дату в виде строки описанному в задании 7 и возвращает объект типа Date, соответствующий переданной дате.
+
+*/
+</script>
+﻿
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Шаблон лабораторной работы</title>
+
+</head>
+<body>
+
+    <p>задание1</p>
+    <script>
+        //задание1
+        var result = 1;
+        function power(chislo, stepen) {
+
+            for (var i = 0; i < stepen; i++) {
+                result = result * chislo;
+            }
+            return result
+        }
+
+        var x = power(2, 10);
+        document.write(x);
+    </script>
+
+
+    <p>задание2</p>
+    <script>
+        //задание2
+        function compare(x) {
+
+            return function (y) {
+                if (y > x) {
+                    return (true);
+                }
+
+                else if (y < x) {
+                    return (false);
+                }
+
+                else {
+                    return null;
+                }
+            }
+        }
+        var result = compare(5);
+
+        document.write(result(5));
+    </script>
+
+
+    <p>задание3</p>
+    <script>
+        //задание3
+
+        function inArray(text, array) {
+            for (var i = 0; i < array.length; i++){
+                if (array[i] === text) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        document.write("Задание №3");
+        document.write(inArray("Жаба", ["Жаба", "Змея", "Кот"]));
+
+        
+    </script>
+
+
+    <p>задание4</p>
+    <script>
+        //задание4
+        var book1 = {};
+        book1.title = 'Название';
+        book1.pubYear = '2007';
+        book1.price = '4500';
+        book1.show = function () {
+            console.log(book1.title + "-" + book1.price);
+
+        }
+
+        function showBook() {
+            console.log(this.title + "-" + this);
+        }
+        book1.show();
+        var book2 = {
+            title: 'Название222',
+            pubYear: '2015',
+            price: '3500'
+        };
+        book2.show = showBook;
+
+    </script>
+
+
+    <p>задание5</p>
+    <script>
+        //задание5(1)
+        var a = [5, 12];
+        var b = [];
+        a[99] = 7;
+
+        for (var x in a) {
+            b = Math.pow(a[x], 2);
+            document.write(b); // [ 2514449 ]
+        }
+    </script>
+
+
+    <p>задание5</p>
+    <script>
+        //задание5(2)
+
+        var a = [5, 12];
+        var b = [];
+        a[99] = 7;
+
+        var length = a.length;
+        var num;
+
+        for (var i = 0; i < length; i++) {
+            num = a[i];
+            if (num != null) {
+                b.push(num * num);
+            }
+        }
+
+        document.write(b); //[ 25, 144, 49 ]
+    </script>
+
+
+
+    <p>задание6</p>
+    <script>
+        //задание6
+        var text = 'Мы знаем, что монохромный цвет - это градации серого';
+        var txt = 'хром';
+        var word;
+
+        var part = text.indexOf(txt);
+        var firstSpace = text.lastIndexOf(' ', part);
+        var nextSpace = text.indexOf(' ', part);
+        
+        word = text.slice(firstSpace, nextSpace);
+        document.write(word);
+
+    </script>
+
+
+    <p>задание7</p>
+    <script>
+        //задание7
+
+        s1 = "25-02-2012";
+        s2 = "25-2-2012";
+        s3 = "01-12-2011";
+        s4 = "2-12-1978";
+        var re = /^([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})$/.test(s4);
+
+        document.write(re);
+    </script>
+
+
+    <p>задание8</p>
+    <script>
+        //задание8
+
+
+        function Book(title, pubYear, price) {
+            this.title = title;
+            this.pubYear = pubYear;
+            this.price = price;
+        }
+        var book1 = new Book('Книга', 1990, '3500тг');
+        
+
+        Book.prototype.show = function () {
+            document.write(this.title);
+            document.write('<br>');
+            document.write(this.pubYear);
+            document.write('<br>');
+            document.write(this.price);
+            document.write('<br>');
+        }
+        book1.show();
+        
+
+    </script>
+
+
+    <p>задание9</p>
+    <script>
+        //задание9  02-25-2012
+
+        
+            let mydate = '25-02-2012';
+        function getDate(date) {
+
+            return new Date(mydate.replace(/^([0]?[1-9]|[1|2][0-9]|[3][0|1])[-]([0]?[1-9]|[1][0-2])[-]([0-9]{4}|[0-9]{2})$/, '$3-$2-$1'));
+        }
+        document.write(getDate(mydate));
+        
+        
+
+
+    </script>
+   
+</body>
+</html>

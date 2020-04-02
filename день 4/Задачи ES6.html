@@ -1,0 +1,242 @@
+﻿<script>
+    /*
+    Задача 1. Сделайте функцию, которая будет генерировать случайные числа от 1 до 10. Сделайте так, чтобы сгенерированное число было задержкой функции setTimeout в секундах. Оберните все это в промис. Пусть промис выполнится успешно, если сгенерировано число от 1 до 5, и с ошибкой - если от 6 до 10.
+
+    Задача 2. Сделайте цепочку из трех промисов. Пусть первый промис возвращает число. Сделайте так, чтобы каждый последующий промис через 3 секунды возводил в квадрат результат предыдущего промиса. После окончания манипуляций выведите число алертом на экран.
+
+    Задача 3.Сделайте 3 промиса, в каждом из которых расположена функция setTimeout со случайно задержкой от 1 до 5 секунд. Пусть первый промис возвращает число 1, второй - число 2, третий - число 3. С помощью Promise.race дождитесь загрузки первого сработавшего промиса и выведите результат его работы на экран.
+
+    Задача 4.Сделайте функцию getNum1, которая возвращает промис, который с задержкой в 3 секунды выведет случайное число от 1 до 5. Сделайте также функцию getNum2, которая возвращает промис, который с задержкой в 5 секунд выведет случайное число от 6 до 10. Создайте async функцию, которая с помощью await будет дожидаться результата getNum1, затем будет дожидаться результата getNum2, а затем найдет сумму полученных чисел и выведет на экран.
+
+    Задача 5.  Реализуйте класс Worker (Работник), который будет иметь следующие свойства: name (имя), surname (фамилия), rate (ставка за день работы), days (количество отработанных дней). Сделайте все его свойства приватными, а для их чтения сделайте методы-геттеры. Для свойства rate и для свойства days сделайте еще и методы-сеттеры. Также класс должен иметь метод getSalary(), который будет выводить зарплату работника. Зарплата - это произведение (умножение) ставки rate на количество отработанных дней days.
+    Класс будет работать так:
+        var worker = new Worker('Иван', 'Иванов', 10, 31);
+        console.log(worker.getRate()); //выведет 10
+        console.log(worker.getDays()); //выведет 31
+        console.log(worker.getSalary()); //выведет 310 - то есть 10*31
+        //Теперь используем сеттер:
+        worker.setRate(20); //увеличим ставку
+        worker.setDays(10); //уменьшим дни
+        console.log(worker.getSalary()); //выведет 200 - то есть 20*10
+    */
+</script>
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ES6</title>
+    <script type="text/javascript">
+
+        //задача 1
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        };
+
+        let promise = new Promise(function (resolve, reject) {
+            let waitTime = getRandomInt(1, 11);
+            setTimeout(() => {
+                if (waitTime <= 5) {
+                    resolve('result');
+                }
+                else if (waitTime > 5 && waitTime <= 10) {
+                    reject('error');
+                };
+            }, waitTime * 100);
+        });
+        promise
+            .then(
+                result => { alert('успешно'); },
+                error => { alert('ошибка') });
+
+
+
+
+    </script>
+
+    <script>
+        //задание 2
+        let promise2 = new Promise(function (resolve, reject) { return resolve(2); });
+
+        promise2
+            .then(function (result) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(result * result);
+                    }, 3000);
+                });
+            })
+            .then(function (result) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(result * result);
+                    }, 3000);
+                });
+            })
+            .then(
+                function (result) {
+                    alert(result);//16//////////////////////////////////////////////////////////////////
+                })
+    </script>
+
+
+    <script>
+        //задание 3
+
+        function getRandomInt(min, max)
+        {
+            return Math.floor(Math.random() * (max - min)) + min;
+        };
+
+        let prom1 = new Promise(function (resolve, reject)
+        {
+            let waitTime = getRandomInt(1, 6);
+            setTimeout(() => 
+            {
+                resolve(1);
+            }, waitTime * 1000);
+        });
+
+        let prom2 = new Promise(function (resolve, reject)
+        {
+            let waitTime = getRandomInt(1, 6);
+            setTimeout(() =>
+            {
+                resolve(2);
+            }, waitTime * 1000);
+        });
+
+        let prom3 = new Promise(function (resolve, reject)
+        {
+            let waitTime = getRandomInt(1, 6);
+            setTimeout(() =>
+            {
+                resolve(3);
+            }, waitTime * 1000);
+        });
+
+        Promise.race([prom1, prom2, prom3]).then(function (val)
+        {
+            alert(val);
+        })
+
+
+    </script>
+
+
+    <script>
+        //задание 4
+
+        function getRandomInt(min, max)
+        {
+            return Math.floor(Math.random() * (max - min)) + min;
+        };
+
+
+        function getNum1()
+        {
+            return new Promise(function (resolve, reject)
+            {
+                let randomNum = getRandomInt(1, 6);
+                setTimeout(() =>
+                {
+                    resolve(randomNum);
+                }, 3000);
+            });
+        };
+
+        function getNum2()
+        {
+            return new Promise(function (resolve, reject)
+            {
+                let randomNum = getRandomInt(6, 11);
+                setTimeout(() =>
+                {
+                    resolve(randomNum);
+                }, 5000);
+            });
+        };
+
+        async function summa()
+        {
+            let result1 = await getNum1();
+            let result2 = await getNum2();
+            alert(result1 + result2);
+        };
+        summa();
+
+
+    </script>
+
+
+    <script>
+        //задание 5
+
+        class Worker
+        {
+            constructor(name, surname, rate, days)
+            {
+                this._name = name;
+                this._surname = surname;
+                this._rate = rate;
+                this._days = days;
+            }
+
+            getName()
+            {
+                return this._name;
+            }
+
+            getSurname()
+            {
+                return this._surname;
+            }
+
+            getRate()
+            {
+                return this._rate;
+            }
+
+            getDays()
+            {
+                return this._days;
+            }
+
+            getSalary()
+            {
+                return this._rate * this._days;
+            }
+
+            setRate(num)
+            {
+                return this._rate = num;
+            }
+
+            setDays(num)
+            {
+                return this._days = num;
+            }
+        }
+
+
+        let worker = new Worker('Иван', 'Иванов', 10, 31);
+
+     //   worker.setRate(20); 
+     //   worker.setDays(10); 
+     //   console.log(worker.getSalary()); //200 
+
+        console.log(worker.getName());//Иван
+        console.log(worker.getSurname());//Иванов
+
+        console.log(worker.getRate()); //10   //set-20
+        console.log(worker.getDays()); //31   //set-10
+        console.log(worker.getSalary()); //310
+
+    </script>
+
+    
+</head>
+<body>
+</body>
+</html>

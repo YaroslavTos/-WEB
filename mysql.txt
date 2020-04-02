@@ -1,0 +1,507 @@
+1. Получить список всех преподавателей отделения Информационные системы с
+указанием Ф.И.О, названия пола и названия отделения.
+
+2. Получить список всех студентов отделения «Информационные системы» с указанием
+Ф.И.О, названия группы и названия специальности.
+
+3. Получить список всех предметов отделения «Технические специальности» с указанием
+названия предмета, количества часов и названия специальности.
+
+4. Получить список всех групп специальности «Информационные системы» с указанием
+названия группы, даты начала и даты окончания.
+
+5. Получить список всех студентов которые обучаются дисциплине «Мультимедиа
+технологии» с указанием Ф.И.О студента и названия группы.
+
+6. Получить список всех преподавателей у которых занятие в диапазоне от 08:30:00 до
+15:00:00 с указанием Ф.И.О преподавателя, названия предмета, количества часов и
+названия группы.
+
+7. Сформировать отчет по количеству студентов обучающихся в отделениях учебного
+заведения.
+
+8. Сформировать отчет по количеству предметов в группах учебного заведения.
+
+9. Получить список всех преподавателей которые не читают ни одну дисциплину.
+
+10. Получить список всех предметов которые не изучаются.
+
+11. Получить список всех специальностей у которых нет ни одной дисциплины.
+
+
+1)
+SELECT 
+toskin_teacher.user_id,
+toskin_user.lastname AS lastname,
+toskin_otdel.name AS otdel,
+toskin_gender.name as gender
+
+FROM `toskin_teacher` 
+
+JOIN toskin_user
+ON toskin_teacher.user_id=toskin_user.user_id
+
+JOIN toskin_otdel
+ON toskin_teacher.otdel_id=toskin_otdel.otdel_id
+
+JOIN toskin_gender
+ON toskin_user.gender_id=toskin_gender.gender_id
+
+WHERE toskin_otdel.otdel_id='1'
+
+2)
+SELECT 
+toskin_student.user_id,
+toskin_user.lastname AS lastname,
+toskin_gruppa.name AS gruppa,
+toskin_special.name AS special,
+toskin_otdel.name AS otdel 
+
+FROM `toskin_student` 
+
+JOIN toskin_user
+ON toskin_student.user_id=toskin_user.user_id
+
+JOIN toskin_gruppa
+ON toskin_student.gruppa_id=toskin_gruppa.gruppa_id
+
+JOIN toskin_special
+ON toskin_gruppa.special_id=toskin_special.special_id
+
+JOIN toskin_otdel
+ON toskin_special.otdel_id=toskin_otdel.otdel_id
+
+WHERE toskin_otdel.otdel_id='1'
+
+
+3)
+SELECT 
+toskin_course.course_id,
+toskin_course.name,
+toskin_special.name AS special,
+toskin_course.hours,
+toskin_otdel.name AS otdel
+
+FROM `toskin_course` 
+JOIN toskin_special
+ON toskin_course.special_id=toskin_special.special_id
+
+JOIN toskin_otdel
+ON toskin_special.otdel_id=toskin_otdel.otdel_id
+
+WHERE toskin_otdel.otdel_id='2'
+
+4)
+SELECT 
+toskin_gruppa.gruppa_id,
+toskin_gruppa.name,
+toskin_special.name AS special ,
+toskin_gruppa.date_begin,
+toskin_gruppa.date_end
+
+FROM `toskin_gruppa` 
+JOIN toskin_special
+ON toskin_gruppa.special_id=toskin_special.special_id
+
+where toskin_special.special_id='1'
+
+5)
+SELECT
+toskin_user.lastname,
+toskin_gruppa.name,
+toskin_course.name
+
+FROM toskin_student
+INNER JOIN toskin_gruppa
+ON toskin_student.gruppa_id = toskin_gruppa.gruppa_id
+
+INNER JOIN toskin_user
+ON toskin_student.user_id = toskin_user.User_id
+
+INNER JOIN toskin_graduate
+ON toskin_graduate.gruppa_id = toskin_gruppa.gruppa_id
+
+INNER JOIN toskin_course
+ON toskin_graduate.course_id = toskin_course.course_id
+
+6)
+SELECT
+toskin_user.lastname,
+toskin_course.name,
+toskin_course.hours,
+toskin_gruppa.name
+
+FROM toskin_teacher
+INNER JOIN toskin_user
+ON toskin_teacher.user_id =toskin_user.User_id
+  
+INNER JOIN toskin_graduate
+ON toskin_graduate.user_id =toskin_teacher.user_id
+  
+INNER JOIN toskin_graduate_time
+ON toskin_graduate_time.graduate_id =toskin_graduate.graduate_id
+  
+INNER JOIN toskin_lesson_num
+ON toskin_graduate_time.lesson_num_id =toskin_lesson_num.lesson_num_id
+
+INNER JOIN toskin_course
+ON toskin_graduate.course_id =toskin_course.course_id
+
+INNER JOIN toskin_gruppa
+ON toskin_graduate.gruppa_id = toskin_gruppa.gruppa_id
+
+WHERE toskin_lesson_num.time_lesson between '08:30:00' AND '15:00:00'
+
+7)
+SELECT
+toskin_otdel.name,
+COUNT(toskin_otdel.name)
+
+FROM toskin_student
+INNER JOIN toskin_user
+ON toskin_student.user_id = toskin_user.User_id
+  
+INNER JOIN toskin_gruppa
+ON toskin_student.gruppa_id = toskin_gruppa.gruppa_id
+  
+INNER JOIN toskin_special
+ON toskin_gruppa.special_id = toskin_special.special_id
+
+INNER JOIN toskin_otdel
+ON toskin_special.otdel_id = toskin_otdel.otdel_id
+
+GROUP BY toskin_otdel.name
+         
+8)
+SELECT
+toskin_gruppa.name,
+COUNT(toskin_course.course_id)
+
+FROM toskin_gruppa
+INNER JOIN toskin_special
+ON toskin_gruppa.special_id =toskin_special.special_id
+
+INNER JOIN toskin_course
+ON toskin_course.special_id =toskin_special.special_id
+
+GROUP BY toskin_course.course_id
+
+9)
+SELECT DISTINCT
+toskin_user.lastname,
+toskin_user.firstname,
+toskin_user.patronomic
+
+FROM toskin_teacher
+INNER JOIN toskin_otdel
+ON toskin_teacher.otdel_id = toskin_otdel.otdel_id
+
+INNER JOIN toskin_special
+ON toskin_special.otdel_id = toskin_otdel.otdel_id
+
+INNER JOIN toskin_user
+ON toskin_teacher.user_id = toskin_user.User_id
+
+INNER JOIN toskin_course
+ON toskin_course.special_id = toskin_special.special_id
+WHERE toskin_course.special_id IS /*not*/ null
+
+10)
+SELECT
+toskin_course.name
+
+FROM toskin_graduate
+INNER JOIN toskin_course
+ON toskin_graduate.course_id = toskin_course.course_id
+
+WHERE toskin_course.special_id IS NULL
+
+11)
+SELECT
+toskin_special.name
+
+FROM toskin_course
+INNER JOIN toskin_special
+ON toskin_course.special_id = toskin_special.special_id
+
+INNER JOIN toskin_graduate
+ON toskin_graduate.course_id = toskin_course.course_id
+
+WHERE toskin_graduate.course_id IS NULL
+
+
+
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+12. Получить список всех студентов жеского пола которые обучаются в диапазоне от
+10:30 до 18:30.
+
+13. Получить список всех предметов которые проводятся в диапазоне от 12:30 до 18:30
+
+14. Получить список всех студентов которые обучаются в пятницу.
+
+15. Получить список всех названий дней недели в которые не преподается ни одна
+дисциплина.
+
+16. Получить список названий специальностей для которых проводятся занятия во
+вторник.
+
+17. Получить список преподавателей (Ф.И.О, название отделения) у которых занятия
+проводятся в субботу.
+
+18. Получить список всех студентов которые обучаются дисциплинам у которых более 12
+часов времени обучения с указанием Ф.И.О студента, названия группы и названия
+специальности.
+
+19. Получить список всех предметов отделения «Технические специальности» с указанием
+названия предмета, количества часов и названия специальности для которых занятия
+проводятся в среду и пятницу.
+
+20. Получить список отделений у которых преподаватели проводят занятия в диапазоне от
+09:00 до 12:00 во вторник.
+
+21. Сформировать отчет для каждого дня недели по проводимому количеству предметов.
+
+22. Получить список специальностей у которых нет занятий в диапазоне от 15:00 до 18:00
+в четверг и субботу.
+
+
+
+12)
+SELECT
+toskin_student.user_id,
+toskin_user.lastname AS name,
+toskin_gender.name AS gender,
+toskin_lesson_num.time_lesson AS times
+
+FROM toskin_student
+JOIN toskin_user
+ON toskin_student.user_id=toskin_user.user_id
+
+JOIN toskin_gender
+ON toskin_user.gender_id=toskin_gender.gender_id
+
+JOIN toskin_gruppa
+ON toskin_student.gruppa_id=toskin_gruppa.gruppa_id
+
+JOIN toskin_graduate
+ON toskin_gruppa.gruppa_id=toskin_graduate.gruppa_id
+
+JOIN toskin_graduate_time
+ON toskin_graduate.graduate_id=toskin_graduate_time.graduate_id
+
+JOIN toskin_lesson_num
+ON toskin_graduate_time.lesson_num_id=toskin_lesson_num.lesson_num_id
+
+
+WHERE toskin_gender.gender_id='2' AND toskin_lesson_num.time_lesson between '10:30:00' AND '18:30:00'
+
+13)
+SELECT
+toskin_course.course_id AS course ,
+toskin_lesson_num.time_lesson AS times 
+
+FROM toskin_graduate
+JOIN toskin_course
+ON toskin_graduate.course_id=toskin_course.course_id
+
+JOIN toskin_graduate_time
+ON toskin_graduate.graduate_id=toskin_graduate_time.graduate_id
+
+JOIN toskin_lesson_num
+ON toskin_graduate_time.lesson_num_id=toskin_lesson_num.lesson_num_id
+
+
+WHERE toskin_lesson_num.time_lesson between '12:30:00' AND '18:30:00'
+
+14)
+SELECT
+toskin_student.user_id,
+toskin_user.lastname AS name,
+toskin_day.name AS day
+
+FROM toskin_student
+LEFT JOIN toskin_user
+ON toskin_student.user_id=toskin_user.user_id
+
+JOIN toskin_gruppa
+ON toskin_student.gruppa_id=toskin_gruppa.gruppa_id
+
+JOIN toskin_graduate
+ON toskin_gruppa.gruppa_id=toskin_graduate.gruppa_id
+
+JOIN toskin_graduate_time
+ON toskin_graduate.graduate_id=toskin_graduate_time.graduate_id
+
+JOIN toskin_day
+ON toskin_graduate_time.day_id=toskin_day.day_id
+
+WHERE toskin_day.day_id='5'
+
+15)
+SELECT toskin_day.* FROM toskin_day
+
+LEFT JOIN toskin_graduate_time 
+ON toskin_day.day_id = toskin_graduate_time.day_id
+
+WHERE toskin_graduate_time.graduate_time_id IS NULL
+
+
+16)
+SELECT
+toskin_special.special_id,
+toskin_special.name,
+
+toskin_day.name AS day
+
+FROM toskin_special
+JOIN toskin_gruppa
+ON toskin_special.special_id=toskin_gruppa.special_id
+
+JOIN toskin_graduate
+ON toskin_gruppa.gruppa_id=toskin_graduate.gruppa_id
+
+JOIN toskin_graduate_time
+ON toskin_graduate.graduate_id=toskin_graduate_time.graduate_id
+
+JOIN toskin_day
+ON toskin_graduate_time.day_id=toskin_day.day_id
+
+WHERE toskin_day.day_id='2'
+
+17)
+SELECT
+toskin_user.lastname AS name,
+toskin_otdel.name AS otdel,
+toskin_day.name AS day
+
+FROM toskin_teacher
+JOIN toskin_user
+ON toskin_teacher.user_id=toskin_user.user_id
+
+JOIN toskin_otdel
+ON toskin_teacher.otdel_id=toskin_otdel.otdel_id
+
+JOIN toskin_graduate
+ON toskin_teacher.user_id=toskin_graduate.user_id
+
+JOIN toskin_graduate_time
+ON toskin_graduate.graduate_id=toskin_graduate_time.graduate_id
+
+JOIN toskin_day
+ON toskin_graduate_time.day_id=toskin_day.day_id
+
+WHERE toskin_day.day_id='6'
+
+18)
+SELECT 
+toskin_user.user_id, 
+toskin_user.lastname, 
+toskin_user.firstname, 
+toskin_gruppa.name, 
+toskin_special.name
+
+FROM toskin_user
+
+INNER JOIN toskin_student 
+ON toskin_student.user_id = toskin_user.user_id
+
+INNER JOIN toskin_gruppa 
+ON toskin_gruppa.gruppa_id = toskin_student.gruppa_id
+
+INNER JOIN toskin_special 
+ON toskin_special.special_id = toskin_gruppa.special_id
+
+INNER JOIN toskin_course 
+ON toskin_course.special_id = toskin_special.special_id AND toskin_course.hours > '95'
+
+19)
+SELECT 
+toskin_course.name, 
+toskin_course.hours, 
+toskin_special.name, 
+toskin_day.name
+
+FROM toskin_otdel
+
+INNER JOIN toskin_special 
+ON toskin_special.otdel_id = toskin_otdel.otdel_id
+
+INNER JOIN toskin_course 
+ON toskin_course.special_id = toskin_special.special_id
+
+INNER JOIN toskin_graduate 
+ON toskin_graduate.course_id = toskin_course.course_id
+
+INNER JOIN toskin_graduate_time 
+ON toskin_graduate_time.graduate_id = toskin_graduate.graduate_id
+
+INNER JOIN toskin_day 
+ON toskin_graduate_time.day_id = toskin_day.day_id
+
+WHERE toskin_otdel.otdel_id = '2' AND (toskin_day.day_id = '3' OR toskin_day.day_id = '5')
+
+20)
+SELECT toskin_otdel.name
+
+From toskin_otdel
+
+Join toskin_teacher 
+ON toskin_teacher.otdel_id = toskin_otdel.otdel_id
+
+Join toskin_graduate 
+ON toskin_graduate.user_id = toskin_teacher.user_id
+
+Join toskin_graduate_time 
+ON toskin_graduate_time.graduate_id = toskin_graduate.graduate_id
+
+Join toskin_day 
+ON toskin_graduate_time.day_id = toskin_day.day_id AND toskin_day.id = '2'
+
+Join toskin_lesson_num 
+On toskin_graduate_time.lesson_num_id = toskin_lesson_num.lesson_num_id AND toskin_lesson_num.time_lesson BETWEEN '09:00:00' AND '12:00:00'
+
+21)
+SELECT
+
+toskin_day.name, 
+COUNT(*)
+
+FROM toskin_course
+
+JOIN toskin_graduate 
+ON toskin_graduate.course_id = toskin_course.course_id
+
+JOIN toskin_graduate_time 
+ON toskin_graduate_time.graduate_id= toskin_graduate.graduate_id
+
+JOIN toskin_day 
+ON toskin_graduate_time.day_id=toskin_day.day_id
+
+GROUP BY toskin_day.day_id
+
+22)
+SELECT toskin_special.*
+
+FROM toskin_special
+
+JOIN toskin_course 
+ON toskin_course.special_id = toskin_special.special_id
+
+JOIN toskin_graduate
+ON toskin_graduate.course_id = toskin_course.course_id
+
+JOIN toskin_graduate_time 
+ON toskin_graduate_time.graduate_id = toskin_graduate.graduate_id
+
+LEFT JOIN toskin_day 
+ON (toskin_graduate_time.day_id = toskin_day.day_id)
+
+LEFT JOIN toskin_lesson_num 
+ON (toskin_graduate_time.lesson_num_id = toskin_lesson_num.lesson_num_id)
+
+WHERE toskin_lesson_num.time_lesson BETWEEN '14:00:00' and '18:00:00' AND (toskin_day.name = 'Четверг' OR toskin_day.name = 'Суббота') AND toskin_day.day_id IS NULL AND toskin_lesson_num.lesson_num_id IS NULL

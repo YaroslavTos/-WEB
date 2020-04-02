@@ -1,0 +1,82 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Открытие новых окон и запись содержания</title>
+<style type="text/css">
+html{background:#fff;font:16px calibri, sans-serif;cursor:default;}
+p{float:left;margin:0 8px 0 0;padding:20px;}
+.p1{background:#ccf;}
+.p2{background:#fcc;}
+.p3{background:#cfc;}
+</style>
+<script type="text/javascript">
+    name = 'Это я его открыла!';
+
+var win; /* НОВОЕ ОКНО! */
+
+    function winOpen() {
+    var w = 300, h = 200;
+	var l = (screen.availWidth - w) / 2;
+	var t = (screen.availHeight - h) / 2;
+	var p = "width="+w+",height="+h+",top="+t+",left="+l;
+	win = window.open("","",p);
+	win.focus();
+	/*	
+		1. Откройте новое окно со следующими параметрами:
+				ширина: 300, высота: 200
+				окно должно быть открыто строго по середине экрана
+		2. Передайте фокус созданному окну
+	*/
+}
+
+    function docWrite() {
+        if(win && !win.closed){
+		win.focus();
+            var text = "";
+            text += "<html style='background:#369;color:#fff;font:16px calibri, sans-serif;'>";
+            text += "<head>";
+            text += "<title>Новое окно</title>";
+            text += "<script>";
+            text += "alert(opener.name)";
+            text += "<\/script>";
+            text += "</head>";
+            text += "<body>";
+            text += "<p>Текст параграфа</p>";
+            text += "</body>";
+            text +="</html>";
+
+
+		win.document.open();
+		win.document.write(text);
+		win.document.close();
+	};
+
+	/*
+		1. Запишите в документ дочернего окна содержание, 
+			состоящее из полного набора элементов, включая html, head, body, title
+		2. Включите в содержание элемент style с содержанием:
+				«html{background:#369;color:#fff;font:16px calibri, sans-serif;}»
+		3. Включите в содержание элемент p с содержанием «Текст параграфа»
+		4. Включите в содержание элемент script с содержанием «alert(opener.name)»
+	*/
+}
+
+    function winClose() {
+    if(win && !win.closed){
+		win.focus();
+		win.close();
+	}
+	/*	
+		1. Проверьте, существует ли дочернее окно и не закрыто ли оно 
+		2. Если окно существует, то закройте его
+	*/
+}
+</script>
+</head>
+<body>
+<p class="p1"><a href="javascript:winOpen();">Открыть окно</a></p>
+<p class="p3"><a href="javascript:docWrite();">Заполнить окно</a></p>
+<p class="p2"><a href="javascript:winClose();">Закрыть окно</a></p>
+</body>
+</html>

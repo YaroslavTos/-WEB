@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Калькулятор для расчета заработной платы!</title>
+
+    <style type="text/css">
+        .resul1
+        {margin-left: 27px;}
+        .resul2
+        {margin-left: 60px;}
+        .resul3
+        {margin-left: 23px;}
+        .okl
+        {margin-left: 147px;}
+        .prem
+        {margin-left: 147px;}
+        .koif
+        {margin-left: 20px;}
+        .rab
+        {margin-left: 26px;}
+        .otrab
+        {margin-left: 65px;}
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+        <h1 class="Zagolovok">Калькулятор Заработной Платы</h1>
+    </header>
+
+    <div id="app">
+        <form @submit.prevent="checkForm" method="POST">
+            <div>
+
+
+            <p v-if="errors.length" class="err">
+                <b>Пожалуйста исправьте указанные ошибки:</b>
+                <ul>
+                    <li v-for="error in errors">{{ error }}</li>
+                </ul>
+            </p>
+                
+                <div >
+                    <div class="grid">
+                        <div class="first">
+                            <label class="labl">- поле  ввода оклада <input type="text" class="inp okl" v-model="zarplata"></label><br><br>
+                            <label class="labl">- поле  ввода премии<input type="text" class="inp prem" v-model="premia"></label><br><br>
+                            <label class="labl">- поле  ввода районного коэффициента <input type="text" class="inp koif " v-model="koificent"></label><br><br>
+                            <label class="labl">- поле  ввода количества рабочих дней<input type="text" class="inp rab" v-model="rabocie"></label><br><br>
+                            <label class="labl">- поле  ввода  отработанных дней<input type="text" class="inp otrab"  v-model="otrabotanye"></label><br><br><br>
+                        </div>
+                        
+                        <button class="btn" @click="calc1()">Расчитать</button><br>
+                        
+                        <div>
+                            
+                            <label class="labl">- полная зарплата <textarea cols="25" rows="4" readonly class="txt resul1" v-model="result1">{{result1}}</textarea> </label><br>
+                            <label class="labl">- НДФЛ 13% <textarea cols="25" rows="4" readonly class="txt resul2" v-model="result2">{{result2}}</textarea> </label><br>
+                            <label class="labl">- зарплаты на руки<textarea cols="25" rows="4" readonly class="txt resul3" v-model="result3">{{result3}}</textarea> </label><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+</body>
+
+<script src="script/script.js"></script>
+ 
+</html>
